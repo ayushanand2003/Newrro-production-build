@@ -11,34 +11,37 @@ export function HeroSection() {
   const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
-    // ✅ Preload video in background
     const preloadVideo = async () => {
       const video = videoRef.current;
       if (!video) return;
 
       try {
+        // ✅ Force the browser to cache and preload the video
         const response = await fetch("/v3.mp4", { cache: "force-cache" });
         if (response.ok) {
           setVideoLoaded(true);
+          video.load(); // Load video into memory
         }
       } catch (error) {
-        console.error("Failed to preload video:", error);
+        console.error("Video preload failed:", error);
       }
     };
 
+    // ✅ Prioritize loading immediately
     if ("requestIdleCallback" in window) {
       requestIdleCallback(preloadVideo);
     } else {
       preloadVideo();
     }
 
-    // ✅ Ensure video plays when ready
+    // ✅ Autoplay as soon as possible
     const playVideo = () => {
       requestAnimationFrame(() => {
         if (videoRef.current) {
-          videoRef.current.play().catch((error) => {
-            console.error("Video autoplay failed:", error);
-          });
+          videoRef.current
+            .play()
+            .then(() => console.log("Video started playing"))
+            .catch((error) => console.error("Autoplay failed:", error));
         }
       });
     };
@@ -48,7 +51,7 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* ✅ Background Video with preloading optimization */}
+      {/* ✅ Super-Fast Background Video */}
       <video
         ref={videoRef}
         autoPlay
@@ -57,7 +60,7 @@ export function HeroSection() {
         playsInline
         preload="auto"
         poster="/video-thumbnail.jpg"
-        className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-700 ${
+        className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
