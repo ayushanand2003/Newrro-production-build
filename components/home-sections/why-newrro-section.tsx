@@ -1,19 +1,56 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 
-const stats = [
-  { label: "Months of Operation", value: "12" },
-  { label: "Students", value: "1500+" },
-  { label: "Courses", value: "10+" },
-  { label: "Edu Kits Scaled", value: "5+" },
-];
+// ✅ Set the start date for automatic "Months of Operation"
+const startDate = new Date("2023-03-01"); // Update this to your actual start date
 
 export function WhyNewrroSection() {
+  const [counts, setCounts] = useState([0, 0, 0, 0]); // Initial count values
+  const [monthsOfOperation, setMonthsOfOperation] = useState(0);
+
+  useEffect(() => {
+    // ✅ Calculate dynamic months of operation
+    const today = new Date();
+    const diffMonths =
+      (today.getFullYear() - startDate.getFullYear()) * 12 +
+      today.getMonth() -
+      startDate.getMonth();
+    setMonthsOfOperation(diffMonths);
+
+    // ✅ Start animated counting effect
+    const interval = setInterval(() => {
+      setCounts((prevCounts) =>
+        prevCounts.map((count, index) => {
+          const targetValue = [
+            diffMonths, // Automatically updated months of operation
+            1500,
+            10,
+            5,
+          ][index];
+
+          return count < targetValue
+            ? Math.min(count + Math.ceil(targetValue / 50), targetValue)
+            : targetValue;
+        })
+      );
+    }, 50);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const stats = [
+    { label: "Months of Operation", value: monthsOfOperation },
+    { label: "Students", value: 1500 },
+    { label: "Courses", value: 10 },
+    { label: "Edu Kits Scaled", value: 5 },
+  ];
+
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
+        {/* ✅ Animated Heading */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -21,14 +58,15 @@ export function WhyNewrroSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold  mb-6 text-gray-900">
+          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">
             A Different Approach, Where Education Meets Innovation!
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
-            We design and deliver high-quality educational kits that transform learning into a practical experience. By visualizing the workings of electronics, programming, and design, students gain a comprehensive understanding.
+            We design and deliver high-quality educational kits that transform learning into a practical experience.
           </p>
         </motion.div>
 
+        {/* ✅ Animated Stats Grid */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {stats.map((stat, index) => (
             <motion.div
@@ -37,9 +75,11 @@ export function WhyNewrroSection() {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               viewport={{ once: true }}
-              className="text-center"
+              className="text-center p-6 bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300"
             >
-              <div className="text-4xl font-bold text-[#df5bd3] mb-2">{stat.value}</div>
+              <div className="text-4xl font-bold text-[#df5bd3] mb-2">
+                {counts[index]}+
+              </div>
               <div className="text-gray-600">{stat.label}</div>
             </motion.div>
           ))}

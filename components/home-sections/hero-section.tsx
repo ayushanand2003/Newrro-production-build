@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,30 +8,47 @@ import Link from "next/link";
 
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
 
   useEffect(() => {
+    // ✅ Preload video in background
+    const preloadVideo = async () => {
+      const video = videoRef.current;
+      if (!video) return;
+
+      try {
+        const response = await fetch("/v3.mp4", { cache: "force-cache" });
+        if (response.ok) {
+          setVideoLoaded(true);
+        }
+      } catch (error) {
+        console.error("Failed to preload video:", error);
+      }
+    };
+
     if ("requestIdleCallback" in window) {
-      requestIdleCallback(() => {
-        const video = videoRef.current;
-        if (video) {
-          video.play().catch((error) => {
+      requestIdleCallback(preloadVideo);
+    } else {
+      preloadVideo();
+    }
+
+    // ✅ Ensure video plays when ready
+    const playVideo = () => {
+      requestAnimationFrame(() => {
+        if (videoRef.current) {
+          videoRef.current.play().catch((error) => {
             console.error("Video autoplay failed:", error);
           });
         }
       });
-    } else {
-      const video = videoRef.current;
-      if (video) {
-        video.play().catch((error) => {
-          console.error("Video autoplay failed:", error);
-        });
-      }
-    }
+    };
+
+    playVideo();
   }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Background Video */}
+      {/* ✅ Background Video with preloading optimization */}
       <video
         ref={videoRef}
         autoPlay
@@ -39,14 +56,16 @@ export function HeroSection() {
         loop
         playsInline
         preload="auto"
-        poster="/video-thumbnail.jpg" // Use a lightweight poster image
-        className="absolute inset-0 z-0 w-full h-full object-cover"
+        poster="/video-thumbnail.jpg"
+        className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-700 ${
+          videoLoaded ? "opacity-100" : "opacity-0"
+        }`}
       >
         <source src="/v3.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
-      {/* Main Content */}
+      {/* ✅ Main Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
         <motion.div
           initial={{ opacity: 0 }}
@@ -68,7 +87,7 @@ export function HeroSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-white font-semibold max-w-3xl mx-auto mb-6 relative z-10"
+            className="text-xl md:text-2xl text-white font-semibold max-w-3xl mx-auto mb-6"
             style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.4)" }}
           >
             &quot;Bring your imaginations to life with us.&quot;
@@ -78,7 +97,7 @@ export function HeroSection() {
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.5 }}
-            className="text-lg md:text-xl text-white/90 font-medium max-w-3xl mx-auto mb-12 relative z-10"
+            className="text-lg md:text-xl text-white/90 font-medium max-w-3xl mx-auto mb-12"
             style={{ textShadow: "2px 2px 4px rgba(0, 0, 0, 0.4)" }}
           >
             Let us be your #1 stepping-stone towards the endless possibilities
