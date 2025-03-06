@@ -8,7 +8,9 @@ export function HeroSection() {
   return (
     <div className="relative h-[70vh] bg-gradient-to-r from-[hsl(var(--chart-1))] to-[hsl(var(--chart-2))]">
       <div className="absolute inset-0 bg-black/50" />
-      <BackgroundLines className="absolute inset-0 opacity-20" /> {/* ✅ Apply BackgroundLines */}
+      <BackgroundLines className="absolute inset-0 opacity-20">
+        <></> {/* ✅ Empty fragment to satisfy required `children` prop */}
+      </BackgroundLines>{/* ✅ Apply BackgroundLines */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}

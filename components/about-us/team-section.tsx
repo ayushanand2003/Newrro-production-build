@@ -2,6 +2,8 @@
 
 import { motion } from "framer-motion";
 import { BackgroundLines } from "@/components/ui/background-lines"; // ✅ Import BackgroundLines
+import Image from 'next/image';
+
 
 const team = [
   {
@@ -33,7 +35,9 @@ const team = [
 export function TeamSection() {
   return (
     <div className="relative py-20 bg-background">
-      <BackgroundLines className="absolute inset-0 opacity-10" /> {/* ✅ BackgroundLines applied */}
+      <BackgroundLines className="absolute inset-0 opacity-10" > {/* ✅ BackgroundLines applied */}
+        <></> {/* ✅ Empty fragment to satisfy required `children` prop */}
+      </BackgroundLines>
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0 }}

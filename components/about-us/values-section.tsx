@@ -18,7 +18,9 @@ const values = [
 export function ValuesSection() {
   return (
     <div className="relative py-20 bg-muted/50">
-      <BackgroundLines className="absolute inset-0 opacity-10" /> {/* ✅ BackgroundLines applied */}
+      <BackgroundLines className="absolute inset-0 opacity-10" > {/* ✅ BackgroundLines applied */}
+        <></> {/* ✅ Empty fragment to satisfy required `children` prop */}
+      </BackgroundLines>
       <div className="container mx-auto px-4">
         <motion.h2 
           initial={{ opacity: 0 }}

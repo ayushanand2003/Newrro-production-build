@@ -7,7 +7,9 @@ export function HeroSection() {
   return (
     <div className="relative h-[40vh] bg-gradient-to-r from-[hsl(var(--chart-1))] to-[hsl(var(--chart-2))] overflow-hidden">
       <div className="absolute inset-0 bg-black/40" />
-      <BackgroundLines className="absolute inset-0 opacity-20" />
+      <BackgroundLines className="absolute inset-0 opacity-20" >
+        <></> {/* ✅ Empty fragment to satisfy required `children` prop */}
+      </BackgroundLines>
       <div className="container relative z-10 mx-auto px-4 h-full flex items-center">
         <div className="max-w-2xl">
           <motion.h1
