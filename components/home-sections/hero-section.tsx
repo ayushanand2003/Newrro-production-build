@@ -13,6 +13,7 @@ export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
   const [videoFailed, setVideoFailed] = useState(false);
+  const [userInteracted, setUserInteracted] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -21,24 +22,40 @@ export function HeroSection() {
     const playVideo = () => {
       video
         .play()
-        .then(() => setVideoLoaded(true))
+        .then(() => {
+          setVideoLoaded(true);
+          console.log("✅ Video autoplay successful");
+        })
         .catch((error) => {
-          console.error("Autoplay failed, forcing interaction:", error);
+          console.warn("⚠️ Autoplay blocked, waiting for interaction", error);
           setVideoFailed(true);
         });
     };
 
-    // ✅ Play video as soon as possible
+    // ✅ Play video immediately when the page loads
     if (document.readyState === "complete") {
       playVideo();
     } else {
       window.addEventListener("load", playVideo);
     }
 
+    // ✅ Simulate user interaction for autoplay (tricks the browser)
+    const simulateInteraction = () => {
+      if (!userInteracted) {
+        setUserInteracted(true);
+        playVideo();
+      }
+    };
+
+    document.addEventListener("mousemove", simulateInteraction, { once: true });
+    document.addEventListener("touchstart", simulateInteraction, { once: true });
+
     return () => {
       window.removeEventListener("load", playVideo);
+      document.removeEventListener("mousemove", simulateInteraction);
+      document.removeEventListener("touchstart", simulateInteraction);
     };
-  }, []);
+  }, [userInteracted]);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -60,6 +77,7 @@ export function HeroSection() {
           loop
           playsInline
           preload="auto"
+          fetchpriority="high"
           crossOrigin="anonymous"
           className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
             videoLoaded ? "opacity-100" : "opacity-0"
