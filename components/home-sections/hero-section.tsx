@@ -12,29 +12,34 @@ const VIDEO_URL =
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
-  const [isPlaying, setIsPlaying] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    const handleCanPlay = () => {
-      setVideoLoaded(true);
-
-      // ✅ Play video only if it's not already playing
-      if (!isPlaying) {
-        video.play().catch((error) => console.error("Autoplay failed:", error));
-        setIsPlaying(true);
-      }
+    const playVideo = () => {
+      video
+        .play()
+        .then(() => console.log("Video playing"))
+        .catch((error) => console.error("Autoplay blocked:", error));
     };
 
-    // ✅ Listen for when the video can fully play without buffering
+    const handleCanPlay = () => {
+      setVideoLoaded(true);
+      playVideo(); // Try playing video when it can be played
+    };
+
     video.addEventListener("canplaythrough", handleCanPlay, { once: true });
+
+    // ✅ Retry autoplay after a short delay (handles autoplay policies)
+    setTimeout(() => {
+      playVideo();
+    }, 500);
 
     return () => {
       video.removeEventListener("canplaythrough", handleCanPlay);
     };
-  }, [isPlaying]);
+  }, []);
 
   return (
     <>
@@ -53,7 +58,7 @@ export function HeroSection() {
           playsInline
           preload="auto"
           crossOrigin="anonymous"
-          className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-300 ${
+          className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
             videoLoaded ? "opacity-100" : "opacity-0"
           }`}
         >
