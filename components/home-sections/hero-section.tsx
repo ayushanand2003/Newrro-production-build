@@ -12,6 +12,7 @@ const VIDEO_URL =
 export function HeroSection() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [videoLoaded, setVideoLoaded] = useState(false);
+  const [videoFailed, setVideoFailed] = useState(false);
 
   useEffect(() => {
     const video = videoRef.current;
@@ -21,20 +22,21 @@ export function HeroSection() {
       video
         .play()
         .then(() => console.log("Video playing"))
-        .catch((error) => console.error("Autoplay blocked:", error));
+        .catch((error) => {
+          console.error("Autoplay blocked:", error);
+          setVideoFailed(true); // Show fallback image if autoplay fails
+        });
     };
 
     const handleCanPlay = () => {
       setVideoLoaded(true);
-      playVideo(); // Try playing video when it can be played
+      playVideo();
     };
 
     video.addEventListener("canplaythrough", handleCanPlay, { once: true });
+    video.addEventListener("error", () => setVideoFailed(true)); // Handle video loading failure
 
-    // ✅ Retry autoplay after a short delay (handles autoplay policies)
-    setTimeout(() => {
-      playVideo();
-    }, 500);
+    setTimeout(playVideo, 500); // Retry autoplay after a short delay
 
     return () => {
       video.removeEventListener("canplaythrough", handleCanPlay);
@@ -49,22 +51,34 @@ export function HeroSection() {
       </head>
 
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+        {/* ✅ Fallback Thumbnail */}
+        {videoFailed && (
+          <img
+            src="/fallback-thumbnail.jpg"
+            alt="Background"
+            className="absolute inset-0 z-0 w-full h-full object-cover"
+          />
+        )}
+
         {/* ✅ Optimized Background Video */}
-        <video
-          ref={videoRef}
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="auto"
-          crossOrigin="anonymous"
-          className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
-            videoLoaded ? "opacity-100" : "opacity-0"
-          }`}
-        >
-          <source src={VIDEO_URL} type="video/mp4" />
-          Your browser does not support the video tag.
-        </video>
+        {!videoFailed && (
+          <video
+            ref={videoRef}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="auto"
+            poster="/fallback-thumbnail.jpg"
+            crossOrigin="anonymous"
+            className={`absolute inset-0 z-0 w-full h-full object-cover transition-opacity duration-500 ${
+              videoLoaded ? "opacity-100" : "opacity-0"
+            }`}
+          >
+            <source src={VIDEO_URL} type="video/mp4" />
+            Your browser does not support the video tag.
+          </video>
+        )}
 
         {/* ✅ Main Content */}
         <div className="relative z-10 container mx-auto px-4 text-center">
