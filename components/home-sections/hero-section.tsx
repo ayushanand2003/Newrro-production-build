@@ -16,42 +16,37 @@ export function HeroSection() {
       if (!video) return;
 
       try {
-        // ✅ Force the browser to cache and preload the video
+        // ✅ Prefetch compressed video into cache before rendering
         const response = await fetch("/v3.mp4", { cache: "force-cache" });
         if (response.ok) {
           setVideoLoaded(true);
-          video.load(); // Load video into memory
+          video.load(); // Load video into memory before rendering
         }
       } catch (error) {
         console.error("Video preload failed:", error);
       }
     };
 
-    // ✅ Prioritize loading immediately
     if ("requestIdleCallback" in window) {
       requestIdleCallback(preloadVideo);
     } else {
       preloadVideo();
     }
 
-    // ✅ Autoplay as soon as possible
-    const playVideo = () => {
-      requestAnimationFrame(() => {
-        if (videoRef.current) {
-          videoRef.current
-            .play()
-            .then(() => console.log("Video started playing"))
-            .catch((error) => console.error("Autoplay failed:", error));
-        }
-      });
-    };
-
-    playVideo();
+    // ✅ Force video to play instantly in the next render cycle
+    requestAnimationFrame(() => {
+      if (videoRef.current) {
+        videoRef.current
+          .play()
+          .then(() => console.log("Video playing"))
+          .catch((error) => console.error("Autoplay failed:", error));
+      }
+    });
   }, []);
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* ✅ Super-Fast Background Video */}
+      {/* ✅ Optimized Background Video Loading */}
       <video
         ref={videoRef}
         autoPlay
@@ -64,17 +59,14 @@ export function HeroSection() {
           videoLoaded ? "opacity-100" : "opacity-0"
         }`}
       >
+        <source src="/v3.webm" type="video/webm" />
         <source src="/v3.mp4" type="video/mp4" />
         Your browser does not support the video tag.
       </video>
 
       {/* ✅ Main Content */}
       <div className="relative z-10 container mx-auto px-4 text-center">
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1 }}>
           <motion.h1
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
