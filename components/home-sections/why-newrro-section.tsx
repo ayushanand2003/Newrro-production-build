@@ -1,14 +1,16 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { motion } from "framer-motion";
 
 // ✅ Set the start date for automatic "Months of Operation"
-const startDate = new Date("2023-03-01"); // Update this to your actual start date
+const startDate = new Date("2023-11-23"); // Update this to your actual start date
 
 export function WhyNewrroSection() {
   const [counts, setCounts] = useState([0, 0, 0, 0]); // Initial count values
   const [monthsOfOperation, setMonthsOfOperation] = useState(0);
+  const [hasStarted, setHasStarted] = useState(false);
+  const sectionRef = useRef(null); // ✅ useRef to track section visibility
 
   useEffect(() => {
     // ✅ Calculate dynamic months of operation
@@ -19,36 +21,54 @@ export function WhyNewrroSection() {
       startDate.getMonth();
     setMonthsOfOperation(diffMonths);
 
-    // ✅ Start animated counting effect
-    const interval = setInterval(() => {
-      setCounts((prevCounts) =>
-        prevCounts.map((count, index) => {
-          const targetValue = [
-            diffMonths, // Automatically updated months of operation
-            1500,
-            10,
-            5,
-          ][index];
+    // ✅ Intersection Observer to detect visibility
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !hasStarted) {
+          setHasStarted(true);
+          const interval = setInterval(() => {
+            setCounts((prevCounts) =>
+              prevCounts.map((count, index) => {
+                const targetValue = [
+                  diffMonths, // Automatically updated months of operation
+                  1500,       // Total students
+                  10,         // Total courses
+                  10,          // Total University Sectio
+                ][index];
 
-          return count < targetValue
-            ? Math.min(count + Math.ceil(targetValue / 50), targetValue)
-            : targetValue;
-        })
-      );
-    }, 50);
+                return count < targetValue
+                  ? Math.min(count + Math.ceil(targetValue / 50), targetValue)
+                  : targetValue;
+              })
+            );
+          }, 50);
 
-    return () => clearInterval(interval);
-  }, []);
+          return () => clearInterval(interval);
+        }
+      },
+      { threshold: 0.3 } // ✅ Only triggers when at least 30% of the section is visible
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [hasStarted]);
 
   const stats = [
     { label: "Months of Operation", value: monthsOfOperation },
     { label: "Students", value: 1500 },
     { label: "Courses", value: 10 },
-    { label: "Edu Kits Scaled", value: 5 },
+    { label: "Trusted Universities", value: 10 },
   ];
 
   return (
-    <section className="py-20 bg-gray-50">
+    <section ref={sectionRef} className="py-20 bg-gray-50">
       <div className="container mx-auto px-4">
         {/* ✅ Animated Heading */}
         <motion.div

@@ -19,7 +19,7 @@ export function HeroSection() {
       >
         <div className="max-w-3xl">
           <h1 className="text-4xl md:text-7xl font-bold text-white mb-6">
-            Transforming Ideas Into Reality
+          Improving Everyday Life With Robotics
           </h1>
           <p className="text-xl text-white/90 mb-8">
             Since 1995, we&apos;ve been at the forefront of innovation, crafting solutions that shape the future of technology and business.
