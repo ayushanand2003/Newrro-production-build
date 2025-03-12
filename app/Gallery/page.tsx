@@ -6,27 +6,103 @@ import { CategoryTabs } from "@/components/gallery-sections/category-tabs";
 import { GalleryGrid } from "@/components/gallery-sections/gallery-grid";
 
 const projects = [
+
   {
     id: 1,
-    title: "Modern Office Design",
-    category: "Interior",
-    image: "https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=1200",
-    description: "Contemporary workspace solution",
+    // title: "Emerge  Event",
+    category: "Emerge",
+    image: "https://raw.githubusercontent.com/ayushanand2003/Newrro-production-build/refs/heads/main/public/assets/work_gallery/Emerge1.png",
+    // description: "Contemporary workspace solution",
   },
   {
     id: 2,
-    title: "Sustainable Housing",
-    category: "Architecture",
-    image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&q=80&w=1200",
-    description: "Eco-friendly residential project",
+    // title: "Emerge  Event",
+    category: "Emerge",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/Emerge2.png?raw=true",
+    // description: "Contemporary workspace solution",
   },
   {
     id: 3,
-    title: "Urban Planning",
-    category: "Infrastructure",
-    image: "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&q=80&w=1200",
-    description: "City development project",
+    // title: "Emerge  Event",
+    category: "Emerge",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/Emerge3.png?raw=true",
+    // description: "Contemporary workspace solution",
   },
+  {
+    id: 4,
+    // title: "Emerge  Event",
+    category: "Arjuna",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/R11.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 5,
+    // title: "Emerge  Event",
+    category: "Arjuna",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/R2.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 6,
+    // title: "Emerge  Event",
+    category: "Arjuna",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/R3.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 7,
+    // title: "Emerge  Event",
+    category: "Arjuna",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/R5.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 8,
+    // title: "Emerge  Event",
+    category: "Workshop",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/GAT.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 9,
+    // title: "Emerge  Event",
+    category: "Workshop",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/GAT1.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 10,
+    // title: "Emerge  Event",
+    category: "Workshop",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/GAT2.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 11,
+    // title: "Emerge  Event",
+    category: "University",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/Global1.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 12,
+    // title: "Emerge  Event",
+    category: "University",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/GAT2.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+  {
+    id: 13,
+    // title: "Emerge  Event",
+    category: "University",
+    image: "https://github.com/ayushanand2003/Newrro-production-build/blob/main/public/assets/work_gallery/Global2.png?raw=true",
+    // description: "Contemporary workspace solution",
+  },
+ 
+ 
+
+
+
 ];
 
 export default function GalleryPage() {
