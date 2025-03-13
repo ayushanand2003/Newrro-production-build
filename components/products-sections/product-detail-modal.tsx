@@ -28,16 +28,16 @@ interface Product {
   badge?: string;
 }
 
-interface ProductDetailModalProps {
+export interface ProductDetailModalProps {
   product: Product | null;
   onClose: () => void;
 }
 
-export function ProductDetailModal({ product, onClose }: ProductDetailModalProps) {
-  // Guard clause at the very top – if no product is provided, return early.
-  if (!product) return null;
-
-  // All hooks are now called unconditionally since product is non-null.
+/* -------------------------------------------------------------------------- */
+/*                    Inner Component – Guaranteed Non‑Null                   */
+/* -------------------------------------------------------------------------- */
+function ProductDetailModalContent({ product, onClose }: { product: Product; onClose: () => void; }) {
+  // All hooks are called unconditionally here.
   const [selectedColor, setSelectedColor] = useState("shadow");
   const [quantity, setQuantity] = useState(1);
   const [selectedImage, setSelectedImage] = useState(0);
@@ -51,7 +51,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
   const [startX, setStartX] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  // Define image arrays – safe to use "product" since it is guaranteed to be non-null.
+  // Define image arrays – product is non‑null here.
   const productImages = [
     product.image,
     "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&q=80&w=400",
@@ -66,7 +66,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
     product.image,
   ];
 
-  // Close on Escape key press
+  // Close modal on Escape key press.
   useEffect(() => {
     const handleEsc = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose();
@@ -75,7 +75,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
     return () => window.removeEventListener("keydown", handleEsc);
   }, [onClose]);
 
-  // Auto-rotate when in 360° view mode
+  // Auto-rotate in 360° mode.
   useEffect(() => {
     let animationId: number;
     if (view360Active) {
@@ -93,7 +93,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
     }
   }, [view360Active]);
 
-  // Handlers for 360° dragging
+  // Handlers for 360° dragging.
   const handleMouseDown = (e: React.MouseEvent) => {
     if (!view360Active) return;
     setIsDragging(true);
@@ -136,7 +136,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
 
   const discountPrice = (product.price * 0.87).toFixed(2);
 
-  // Simulate adding to cart
+  // Simulate adding to cart.
   const handleAddToCart = () => {
     setIsAddingToCart(true);
     setTimeout(() => {
@@ -204,7 +204,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   {product.badge}
                 </motion.div>
               )}
-
               <motion.div
                 className="relative w-full h-full"
                 animate={{ scale: isZoomed && !view360Active ? 1.3 : 1 }}
@@ -221,7 +220,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   style={{ pointerEvents: view360Active ? "none" : "auto" }}
                 />
               </motion.div>
-
               {view360Active && (
                 <motion.div
                   className="absolute bottom-4 left-1/2 -translate-x-1/2 px-4 py-2 rounded-full text-white bg-foreground/60 backdrop-blur-sm flex items-center gap-2"
@@ -232,7 +230,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   <span className="text-xs font-medium">Drag to explore</span>
                 </motion.div>
               )}
-
               {!view360Active && (
                 <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-3">
                   {[ChevronLeft, ChevronRight].map((Icon, idx) => (
@@ -275,7 +272,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                 <RotateCw className={cn("w-4 h-4", view360Active && "animate-spin")} />
                 {view360Active ? "Exit 360°" : "View 360°"}
               </motion.button>
-
               <div className={cn("grid grid-cols-4 gap-2 flex-1", view360Active && "opacity-50 pointer-events-none")}>
                 {productImages.map((img, idx) => (
                   <motion.div
@@ -299,6 +295,7 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
             </div>
           </div>
 
+          {/* RIGHT COLUMN: Product Details */}
           <div className="p-6 sm:p-8 flex flex-col">
             <div className="space-y-4 sm:space-y-5">
               <motion.div
@@ -309,7 +306,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                 <Sparkles className="w-3 h-3" />
                 <span>{product.category || "PREMIUM"}</span>
               </motion.div>
-
               <motion.h2
                 className="text-2xl sm:text-3xl font-bold tracking-tight text-foreground"
                 initial={{ opacity: 0, y: -20 }}
@@ -317,7 +313,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
               >
                 {product.name}
               </motion.h2>
-
               <motion.div
                 className="flex items-center gap-3 flex-wrap text-xs sm:text-sm"
                 initial={{ opacity: 0, y: -20 }}
@@ -338,7 +333,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   </span>
                 </span>
               </motion.div>
-
               <motion.div
                 className="flex items-center gap-2 sm:gap-3 flex-wrap"
                 initial={{ opacity: 0, y: -20 }}
@@ -354,7 +348,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   SAVE 13%
                 </span>
               </motion.div>
-
               <motion.p
                 className="text-sm sm:text-base leading-relaxed text-foreground"
                 initial={{ opacity: 0, y: -20 }}
@@ -494,7 +487,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                     <span>Add to Cart</span>
                   </>
                 )}
-
                 {showAddedMessage && (
                   <motion.div
                     className="absolute top-0 left-0 right-0 -translate-y-full mt-2 py-1 px-2 text-center text-xs text-white rounded-lg bg-primary"
@@ -506,7 +498,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
                   </motion.div>
                 )}
               </motion.button>
-
               <motion.button
                 className="flex-1 px-5 py-3 rounded-xl font-semibold relative overflow-hidden bg-primary text-white shadow"
                 whileHover={{ scale: 1.02, y: -2 }}
@@ -514,7 +505,6 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
               >
                 <span className="relative">Buy Now</span>
               </motion.button>
-
               <motion.button
                 className="w-12 h-12 rounded-xl flex items-center justify-center bg-white/20 border border-white/20 shadow backdrop-blur-md"
                 whileHover={{ scale: 1.1 }}
@@ -548,6 +538,14 @@ export function ProductDetailModal({ product, onClose }: ProductDetailModalProps
       </motion.div>
     </AnimatePresence>
   );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                     Outer Wrapper Component                              */
+/* -------------------------------------------------------------------------- */
+export function ProductDetailModal({ product, onClose }: ProductDetailModalProps) {
+  if (!product) return null;
+  return <ProductDetailModalContent product={product} onClose={onClose} />;
 }
 
 export default ProductDetailModal;
