@@ -1,7 +1,7 @@
-"use client";
+"use client"
 
-import { motion } from "framer-motion";
-import { Star, Shield, Zap, Clock } from "lucide-react";
+import { motion } from "framer-motion"
+import { Star, Shield, Zap, Clock } from "lucide-react"
 
 const benefits = [
   {
@@ -24,13 +24,12 @@ const benefits = [
     title: "24/7 Support",
     description: "Our experts are available around the clock for assistance.",
   },
-];
+]
 
 export function BenefitsSection() {
   return (
     <section className="py-20 relative bg-gradient-to-r from-[#f8f8ff] to-[#ffffff]">
       <div className="container mx-auto px-6 lg:px-12">
-        
         {/* ✅ Heading Section */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -39,9 +38,7 @@ export function BenefitsSection() {
           viewport={{ once: true }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
-            Why Choose Our Products?
-          </h2>
+          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">Why Choose Our Products?</h2>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto">
             Experience the best in technology, security, and performance.
           </p>
@@ -63,24 +60,21 @@ export function BenefitsSection() {
               {/* ✅ Floating Icon Animation */}
               <motion.div
                 animate={{ y: [0, -5, 0] }}
-                transition={{ repeat: Infinity, duration: 3, ease: "easeInOut" }}
+                transition={{ repeat: Number.POSITIVE_INFINITY, duration: 3, ease: "easeInOut" }}
                 className="mb-6 text-[#df5bd3] group-hover:text-[#7e5bf6] transition-all duration-300"
               >
                 {benefit.icon}
               </motion.div>
 
               {/* ✅ Title */}
-              <h3 className="text-xl font-semibold mb-3 text-gray-900">
-                {benefit.title}
-              </h3>
+              <h3 className="text-xl font-semibold mb-3 text-gray-900">{benefit.title}</h3>
 
               {/* ✅ Description */}
-              <p className="text-gray-600">
-                {benefit.description}
-              </p>
+              <p className="text-gray-600">{benefit.description}</p>
 
               {/* ✅ Animated Border Effect */}
-              <div className="absolute inset-0 border-2 border-transparent 
+              <div
+                className="absolute inset-0 border-2 border-transparent 
                 group-hover:border-[#df5bd3] group-hover:shadow-lg rounded-2xl 
                 transition-all duration-300 pointer-events-none"
               />
@@ -89,5 +83,6 @@ export function BenefitsSection() {
         </div>
       </div>
     </section>
-  );
+  )
 }
+
