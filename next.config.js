@@ -6,7 +6,8 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    domains: ['images.unsplash.com'],
+    domains: ['images.unsplash.com','raw.githubusercontent.com',
+      'github.com',],
   },
   webpack: (config) => {
     config.externals.push({

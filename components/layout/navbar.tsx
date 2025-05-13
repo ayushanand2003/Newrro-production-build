@@ -10,8 +10,10 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { name: "Home", href: "/" },
-  { name: "Arjuna", href: "/Arjuna" },
-  // { name: "About Us", href: "/about" },
+  // { name: "ARJUNA", href: "/Arjuna" },
+  // { name: "About Us", href: "/About_Us" },
+  {name: "Labs", href:"/labs"},
+  { name: "About Us", href: "/about" },
   { name: "Work Gallery", href: "/Gallery" },
   { name: "Products", href: "/products" },
 
@@ -35,7 +37,7 @@ export function Navbar() {
   return (
     <nav
       className={cn(
-        "fixed w-full z-50 transition-all duration-500 px-5 md:px-10",
+        "fixed w-full z-30 transition-all duration-500 px-5 md:px-10",
         scrolled ? "py-3" : "py-6"
       )}
     >

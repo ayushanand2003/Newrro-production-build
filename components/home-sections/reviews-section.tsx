@@ -10,7 +10,7 @@ import { Animatedreviewsexp } from "../ui/reviews-exp";
 export function ReviewsSection() {
   return (
     <section className="py-20 bg-gray-50">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto z-10 px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -34,7 +34,7 @@ export function ReviewsSection() {
             viewport={{ once: true }}
             className="w-full md:w-1/2 mb-4 md:mb-0 text-center"
           >
-            <h3 className="text-2xl font-semibold mb-2 text-black">&quot;What Our Students Say&quot;</h3>
+            <h3 className="text-2xl z-10 font-semibold mb-2 text-black">&quot;What Our Students Say&quot;</h3>
             <Animatedreviewsstu />
           </motion.div>
           <motion.div
@@ -44,7 +44,7 @@ export function ReviewsSection() {
             viewport={{ once: true }}
             className="w-full md:w-1/2 text-center"
           >
-            <h3 className="text-2xl font-semibold mb-2 text-black">&quot;Expert Insights&quot;</h3>
+            <h3 className="text-2xl z-10 font-semibold mb-2 text-black">&quot;Expert Insights&quot;</h3>
             <Animatedreviewsexp />
           </motion.div>
         </div>

@@ -1,10 +1,12 @@
 import { HeroSection } from "@/components/Arjuna-sections/hero-section";
 import { IntelligenceFeatures } from "@/components/Arjuna-sections/intelligence-features";
-import { SpecificationSection } from "@/components/Arjuna-sections/specification-section";
+import  GroupedSpecCards   from "@/components/Arjuna-sections/specification-section";
 import { ProductTabs } from "@/components/Arjuna-sections/otherproducts-section";
 import dynamic from 'next/dynamic'
 import { ReviewsSection } from "@/components/home-sections/reviews-section";
 import { ReviewsSectionArjuna } from "@/components/Arjuna-sections/review";
+import { VideoSection } from "@/components/Arjuna-sections/video-section";
+
 
 const ModelSection = dynamic(() => import('@/components/Arjuna-sections/model-section'), {
   ssr: false,
@@ -16,8 +18,9 @@ export default function Home() {
     <div className="min-h-screen bg-white">
       <HeroSection />
       <ModelSection />
+      <VideoSection />
       <IntelligenceFeatures />
-      <SpecificationSection />
+      <GroupedSpecCards />
       <ReviewsSectionArjuna />
       {/* <ProductTabs /> */}
       

@@ -6,7 +6,7 @@ import { Html } from '@react-three/drei'
 import { useModelLoader } from '@/hooks/use-model-loader'
 
 export function ArjunaModel() {
-  const { model, error, isLoading } = useModelLoader('/Arjuna.glb')
+  const { model, error, isLoading } = useModelLoader('/assets/product_models/Arjuna.glb')
   const [centeredModel, setCenteredModel] = useState<Group | null>(null)
 
   useEffect(() => {

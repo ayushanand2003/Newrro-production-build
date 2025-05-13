@@ -1,114 +1,176 @@
 'use client';
 
-import { motion } from "framer-motion";
-import { BentoGrid, BentoGridItem } from "../ui/bentogrid";
-import { Cpu, HardDrive, Boxes, Cloud, MapPin, Battery, LoaderPinwheel, Camera, TvMinimal } from "lucide-react";
-import { cn } from "@/lib/utils";
+import { useState } from 'react';
+import Image from 'next/image';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ChevronDown, ChevronUp, Cpu, Radar, MoveUpRight, Wifi, Monitor, BatteryFull } from 'lucide-react';
 
-const specifications = [
+const groupedSpecs = [
   {
-    icon: <Cpu className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Jetson Nano",
-    description: "Powered by NVIDIA Jetson Nano, offering high performance for AI applications with low power consumption.",
-    imageSrc: "/assets/specific_images/jetson.png",
-    imageAlt: "Jetson Nano hardware"
+    group: 'Computing & AI',
+    icon: <Cpu className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: 'Jetson Nano',
+        image: '/assets/specific_images/jetson.jpg',
+        description: 'AI edge computing with 128-core GPU for robotics & ML.',
+      },
+      {
+        title: 'Smart Robot Manager Board',
+        image: '/assets/specific_images/smart-robot-manager.jpg',
+        description: 'Monitors battery, power, and safety mechanisms for robots.',
+      },
+    ],
   },
   {
-    icon: <MapPin className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "IMU (Inertial Measurement Unit)",
-    description: "Equipped with a high-precision IMU for real-time motion and orientation tracking.",
-    imageSrc: "/assets/specific_images/imu.jpg",
-    imageAlt: "IMU module"
+    group: 'Sensing & Perception',
+    icon: <Radar className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: 'LiDAR',
+        image: '/assets/specific_images/lidar.jpg',
+        description: '360° laser scanner for precise mapping and object detection.',
+      },
+      {
+        title: 'Ultrasonic Sensor',
+        image: '/assets/specific_images/ultrasonic.jpg',
+        description: 'Real-time distance measurement & obstacle detection.',
+      },
+      {
+        title: '2K USB Camera',
+        image: '/assets/specific_images/camera.jpg',
+        description: 'High-res 2K camera with wide-angle lens and microphones.',
+      },
+      {
+        title: 'Proximity Sensor',
+        image: '/assets/specific_images/proximity.jpg',
+        description: 'Detects nearby objects to enhance navigation.',
+      },
+      {
+        title: 'IMU BNO055',
+        image: '/assets/specific_images/imu-bno.jpg',
+        description: '9-axis orientation sensor with sensor fusion algorithms.',
+      },
+    ],
   },
   {
-    icon: <Battery className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Proximity Sensors",
-    description: "Advanced proximity sensors for detecting nearby objects and enhancing navigation capabilities.",
-    imageSrc: "/assets/specific_images/proximity.webp",
-    imageAlt: "Proximity sensors"
+    group: 'Motion & Control',
+    icon: <MoveUpRight className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: 'Smart Actuators',
+        image: '/assets/specific_images/actuator.jpg',
+        description: 'High-torque servos with magnetic encoders for precise motion.',
+      },
+      {
+        title: 'Servo Driver Expansion Board',
+        image: '/assets/specific_images/servo-driver.jpg',
+        description: 'Controls up to 253 servos with WiFi and Bluetooth support.',
+      },
+      {
+        title: 'Motor Driver',
+        image: '/assets/specific_images/motor-driver.jpg',
+        description: 'PWM control for smooth and responsive motion.',
+      },
+    ],
   },
   {
-    icon: <Cloud className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "LiDAR Representations",
-    description: "LiDAR integration for accurate 3D mapping and environment scanning.",
-    imageSrc: "/assets/specific_images/lidar.jpg",
-    imageAlt: "LiDAR representation"
+    group: 'Connectivity & Interface',
+    icon: <Wifi className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: 'AC8265 Wireless NIC',
+        image: '/assets/specific_images/wifi-nic.jpg',
+        description: 'Dual-band WiFi and Bluetooth NIC for low-latency connectivity.',
+      },
+    ],
   },
   {
-    icon: <LoaderPinwheel className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "High Precision Smart Actuators",
-    description: "IAdvanced smart actuators designed for precise control, efficient response, and seamless integration, enabling optimal robotic performance and accurate movement execution.",
-    imageSrc: "/assets/specific_images/servo.jpg",
-    imageAlt: "High Precision Smart Actuators"
+    group: 'Display & User Interface',
+    icon: <Monitor className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: 'Display',
+        image: '/assets/specific_images/display.jpg',
+        description: 'Touchscreen and OLED displays for visual feedback and control.',
+      },
+    ],
   },
   {
-    icon: <Boxes className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Ultrasonics",
-    description: "Ultrasonic sensors for precise distance measurement and obstacle detection.",
-    imageSrc: "/assets/specific_images/us.webp",
-    imageAlt: "Ultrasonic sensors"
+    group: 'Power Supply',
+    icon: <BatteryFull className="w-5 h-5 mr-2 text-[#df5bd3]" />, 
+    items: [
+      {
+        title: '10,000 mAh Li-Ion Battery',
+        image: '/assets/specific_images/battery.jpg',
+        description: 'Battery with BMS for overcharge and thermal protection.',
+      },
+    ],
   },
-  {
-    icon: <HardDrive className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Arjuna Motherboard",
-    description: "Custom-built Arjuna motherboard that integrates all sensors and computing resources for optimal performance.",
-    imageSrc: "/assets/specific_images/mb.webp",
-    imageAlt: "Arjuna Motherboard"
-  },
-  {
-    icon: <Camera className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Camera",
-    description: "Camera-based systems for precise distance measurement and obstacle detection.",
-    imageSrc: "/assets/specific_images/cam.png",
-    imageAlt: "Camera"
-  },
-  {
-    icon: <TvMinimal className="w-12 h-12 text-[#4A3EBD]" />,
-    title: "Display",
-    description: "Integrated display system for real-time status updates, diagnostics, and user interface interaction.",
-    imageSrc: "/assets/specific_images/disp.png",
-    imageAlt: "Display"
-  },
-  
 ];
 
-export function SpecificationSection() {
-  return (
-    <section className="py-20 bg-[#F3F4F6] relative overflow-hidden">
-      <div className="container mx-auto px-4 relative z-10">
-        {/* Section Header */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#4A3EBD]">
-            Product Specifications
-          </h2>
-          <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Dive into the detailed specifications that power this advanced device.
-          </p>
-        </motion.div>
+export default function GroupedSpecCards() {
+  const [expanded, setExpanded] = useState<string | null>(null);
 
-        {/* BentoGrid with dynamic cards */}
-        <BentoGrid className="max-w-4xl mx-auto">
-          {specifications.map((spec, index) => (
-            <BentoGridItem
-              key={index}
-              title={spec.title}
-              description={spec.description}
-              header={spec.icon}
-              className={cn(
-                index === 0 ? "md:col-span-1 md:row-span-1" : ""
+  return (
+    <section className="py-20 bg-white">
+      <div className="text-center mb-16">
+        <h2 className="text-4xl md:text-5xl font-bold mb-6 text-gray-900">Component Categories</h2>
+        <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+          Click a category to explore all hardware modules inside Arjuna.
+        </p>
+      </div>
+
+      <div className="max-w-5xl mx-auto space-y-6">
+        {groupedSpecs.map((group, index) => (
+          <motion.div
+            whileHover={{ scale: 1.01 }}
+            transition={{ duration: 0.3 }}
+            key={group.group}
+            className="border border-gray-200 rounded-xl overflow-hidden shadow-sm"
+          >
+            <button
+              onClick={() => setExpanded(expanded === group.group ? null : group.group)}
+              className="w-full flex justify-between items-center px-6 py-4 text-left text-lg font-semibold text-gray-800 hover:bg-gray-50 transition"
+            >
+              <div className="flex items-center">{group.icon}{group.group}</div>
+              {expanded === group.group ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
+            </button>
+            <AnimatePresence>
+              {expanded === group.group && (
+                <motion.div
+                  initial={{ height: 0, opacity: 0 }}
+                  animate={{ height: 'auto', opacity: 1 }}
+                  exit={{ height: 0, opacity: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="px-6 pb-6"
+                >
+                  <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    {group.items.map((item, idx) => (
+                      <motion.div
+                        key={idx}
+                        whileHover={{ scale: 1.03 }}
+                        transition={{ type: 'spring', stiffness: 200, damping: 20 }}
+                        className="bg-gray-100 border border-gray-100 rounded-xl p-4 shadow-md hover:shadow-lg transition"
+                      >
+                        <div className="relative w-full h-40 mb-3 overflow-hidden rounded-md">
+                          <Image
+                            src={item.image}
+                            alt={item.title}
+                            fill
+                            className="object-contain"
+                          />
+                        </div>
+                        <h3 className="text-lg font-semibold text-gray-800 mb-2">{item.title}</h3>
+                        <p className="text-sm text-gray-600 leading-relaxed">{item.description}</p>
+                      </motion.div>
+                    ))}
+                  </div>
+                </motion.div>
               )}
-              imageSrc={spec.imageSrc}
-              imageAlt={spec.imageAlt}
-            />
-          ))}
-          
-        </BentoGrid>
+            </AnimatePresence>
+          </motion.div>
+        ))}
       </div>
     </section>
   );

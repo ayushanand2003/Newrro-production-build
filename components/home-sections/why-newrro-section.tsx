@@ -13,7 +13,6 @@ export function WhyNewrroSection() {
   const sectionRef = useRef(null); // ✅ useRef to track section visibility
 
   useEffect(() => {
-    // ✅ Calculate dynamic months of operation
     const today = new Date();
     const diffMonths =
       (today.getFullYear() - startDate.getFullYear()) * 12 +
@@ -21,19 +20,20 @@ export function WhyNewrroSection() {
       startDate.getMonth();
     setMonthsOfOperation(diffMonths);
 
-    // ✅ Intersection Observer to detect visibility
+    let intervalId: ReturnType<typeof setInterval>;
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting && !hasStarted) {
           setHasStarted(true);
-          const interval = setInterval(() => {
+          intervalId = setInterval(() => {
             setCounts((prevCounts) =>
               prevCounts.map((count, index) => {
                 const targetValue = [
-                  diffMonths, // Automatically updated months of operation
-                  1500,       // Total students
-                  10,         // Total courses
-                  10,          // Total University Sectio
+                  diffMonths,
+                  1500,
+                  10,
+                  10,
                 ][index];
 
                 return count < targetValue
@@ -42,21 +42,17 @@ export function WhyNewrroSection() {
               })
             );
           }, 50);
-
-          return () => clearInterval(interval);
         }
       },
-      { threshold: 0.3 } // ✅ Only triggers when at least 30% of the section is visible
+      { threshold: 0.3 }
     );
 
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
+    const currentRef = sectionRef.current;
+    if (currentRef) observer.observe(currentRef);
 
     return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current);
-      }
+      if (currentRef) observer.unobserve(currentRef);
+      if (intervalId) clearInterval(intervalId);
     };
   }, [hasStarted]);
 

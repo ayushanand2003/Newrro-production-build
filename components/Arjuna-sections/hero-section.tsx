@@ -1,111 +1,84 @@
-'use client';
+"use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
+import { motion, useInView } from "framer-motion";
+import { Button } from "@/components/ui/button";
 import { ContainerScroll, Card } from "@/components/ui/container-scroll";
-import { ChevronRight } from "lucide-react";
 
 export function HeroSection() {
-  // Responsive Scale Logic
   const [responsiveScale, setResponsiveScale] = useState(1);
+
+  // Scroll animation trigger
+  const videoSectionRef = useRef(null);
+  const isInView = useInView(videoSectionRef, { once: true, margin: "-100px" });
 
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth < 768) {
-        setResponsiveScale(0.8); // Scale down for smaller devices
-      } else {
-        setResponsiveScale(1); // Normal scale for larger devices
-      }
+      setResponsiveScale(window.innerWidth < 768 ? 0.8 : 1);
     };
-
-    handleResize(); // Set initial scale
+    handleResize();
     window.addEventListener("resize", handleResize);
-
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      
-      {/* Main Content */}
-      <div className="py-60 relative z-20 px-2 text-center">
+    <>
+      {/* 🟣 Hero Section */}
+      <section className="relative h-[60vh] pt-16 pb-4 bg-gradient-to-r from-[hsl(var(--chart-1))] to-[hsl(var(--chart-2))]">
+        {/* Overlay */}
+        <div className="absolute inset-0 bg-black/50 z-0" />
+
+        {/* Hero Content */}
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8 }}
+          className="container relative z-10 mx-auto px-4 h-full flex flex-col items-left justify-center text-left"
         >
+          {/* ARJUNA Gradient Heading */}
           <motion.h1
             initial={{ y: 50, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            className="text-6xl md:text-8xl font-bold mb-8 text-black"
+            transition={{ duration: 0.8 }}
+            className="text-6xl md:text-9xl font-bold mb-6 text-left"
           >
             <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#df5bd3] to-[#7e5bf6]">
               ARJUNA
             </span>
           </motion.h1>
 
-          <motion.p
-            initial={{ y: 20, opacity: 0 }}
+          {/* Subheading */}
+          <motion.h2
+            initial={{ y: 40, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            className="text-xl md:text-2xl text-black font-semibold max-w-3xl mx-auto mb-6 relative z-10"
-            style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-xl md:text-4xl text-white/90 mb-4"
           >
-            &quot;Revolutionizing How You Learn Robotics, One Step at a Time!&quot;
+            The Future of Robotics Starts Here
+          </motion.h2>
+
+          {/* Description */}
+          <motion.p
+            initial={{ y: 30, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.3 }}
+            className="text-sm md:text-2xl text-white/80 max-w-2xl mb-6"
+          >
+            Explore the technology powering ARJUNA, our most advanced and visionary robotics solution yet.
           </motion.p>
-        </motion.div>
 
-        <motion.div
-          initial={{ y: 30, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 1 }}
-          className="relative"
-        >
-          <div className="flex flex-col overflow-hidden">
-            <ContainerScroll>
-              {/* Card Component */}
-              <Card
-                videoSrc="v1.mp4"
-                responsiveScale={responsiveScale}
-              />
-            </ContainerScroll>
-          </div>
-        </motion.div>
-
-        {/* Text above the button */}
-        <motion.p
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="text-xl md:text-2xl text-black font-semibold max-w-3xl mx-auto mb-6 relative z-10"
-          style={{ textShadow: '2px 2px 4px rgba(0, 0, 0, 0.2)' }}
-        >
-          &quot;Get the full scoop on Arjuna! Click below and explore all the possibilities!&quot;
-        </motion.p>
-
-        {/* Download Brochure Button */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-12 flex justify-center"
-        >
-          <a
-            href="/assets/NR_Arjuna_catalogue.pdf"  // Replace with the correct path to your brochure
-            download
+          {/* CTA Button */}
+          <motion.div
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 1, opacity: 1 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
           >
-            <button
-              className="bg-[#df5bd3] hover:bg-[#c74ebe] text-white px-8 py-4 text-lg rounded-full flex items-center group relative overflow-hidden transition-all duration-300 ease-in-out"
-            >
-              <span className="relative z-10 flex items-center">
-                Download Brochure
-                <ChevronRight className="ml-2 transition-transform group-hover:translate-x-1" />
-              </span>
-            </button>
-          </a>
+            <Button size="lg" variant="secondary" className="text-lg">
+              Join Our Journey
+            </Button>
+          </motion.div>
         </motion.div>
-      </div>
-    </section>
+      </section>
+    </>
   );
 }
